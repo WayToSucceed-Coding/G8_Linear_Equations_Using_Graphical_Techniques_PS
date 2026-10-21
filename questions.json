@@ -1,0 +1,230 @@
+{
+  "heading": "G8_Solving Linear Equations Using Graphical Techniques",
+  "topics": [
+    {
+      "heading": "Solving Linear Equations Using Graphical Techniques",
+      "questions": [
+
+  
+  
+  {
+    "questionNo": 1,
+    "question": [
+      "The graph of y = 3x + 2 is shown.<br><img  src = './assests/images/question/1.png' width = '30%' ><br>",
+      "State the coordinates (x, y) of the following point on this graph.<br>",
+      "3x + 2 = 11<br>",
+      "Answer: (______, ______)"
+    ],
+    "input": ["", ""],
+    "answer": ["3", "11"]
+  },
+  {
+    "questionNo": 2,
+    "question": [
+      "The graph of y = 3x + 2 is shown.<br><img  src = './assests/images/question/2.png' width = '30%' ><br>",
+      "State the coordinates (x, y) of the following point on this graph.<br>",
+      "3x + 2 = -4<br>",
+      "Answer: (______, ______)"
+    ],
+    "input": ["", ""],
+    "answer": ["-2", "-4"]
+  },
+  {
+    "questionNo": 3,
+    "question": [
+      "The graph of y = 3x + 2 is shown.<br><img  src = './assests/images/question/3.png' width = '30%' ><br>",
+      "State the coordinates (x, y) of the following point on this graph.<br>",
+      "3x + 2 = 5<br>",
+      "Answer: (______, ______)"
+    ],
+    "input": ["", ""],
+    "answer": ["1", "5"]
+  },
+  {
+    "questionNo": 4,
+    "question": [
+      "The graph of y = -2x + 6 is shown.<br><img  src = './assests/images/question/4.png' width = '30%' ><br>",
+      "Use the graph to find the solution to the equation.<br>",
+      "-2x + 6 = 0<br>",
+      "x = ______"
+    ],
+    "input": [""],
+    "answer": ["3"]
+  },
+  {
+    "questionNo": 5,
+    "question": [
+      "The graph of y = -2x + 6 is shown.<br><img  src = './assests/images/question/5.png' width = '30%' ><br>",
+      "Use the graph to find the solution to the equation.<br>",
+      "-2x + 6 = 8<br>",
+      "x = ______"
+    ],
+    "input": [""],
+    "answer": ["-1"]
+  },
+  {
+    "questionNo": 6,
+    "question": [
+      "The graph of y = -2x + 6 is shown.<br><img  src = './assests/images/question/6.png' width = '30%' ><br>",
+      "Use the graph to find the solution to the equation.<br>",
+      "-2x + 6 = -2<br>",
+      "x = ______"
+    ],
+    "input": [""],
+    "answer": ["4"]
+  },
+  {
+    "questionNo": 7,
+    "question": [
+      "Use the graph of y = 5 - 2x to solve the following equation.<br><img  src = './assests/images/question/7.png' width = '30%' ><br>",
+      "5 - 2x = 9<br>",
+      "x = ______"
+    ],
+    "input": [""],
+    "answer": ["-2"]
+  },
+  {
+    "questionNo": 8,
+    "question": [
+      "Use the graph of y = 5 - 2x to solve the following equation.<br><img  src = './assests/images/question/8.png' width = '30%' ><br>",
+      "5 - 2x = 3<br>",
+      "x = ______"
+    ],
+    "input": [""],
+    "answer": ["1"]
+  },
+  {
+    "questionNo": 9,
+    "question": [
+      "Use the graph of y = 5 - 2x to solve the following equation.<br><img  src = './assests/images/question/9.png' width = '30%' ><br>",
+      "5 - 2x = -1<br>",
+      "x = ______"
+    ],
+    "input": [""],
+    "answer": ["3"]
+  },
+  {
+    "questionNo": 10,
+    "question": [
+      "Look at the graph.<br><img  src = './assests/images/question/10.png' width = '30%' ><br>",
+      "Write down the coordinates of the point of intersection of the two lines.<br>",
+      "Point of intersection = (______, ______)"
+    ],
+    "input": ["", ""],
+    "answer": ["2", "4"]
+  },
+  {
+    "questionNo": 11,
+    "question": [
+      "Look at the graph.<br><img  src = './assests/images/question/11.png' width = '30%' ><br>",
+      "State the coordinates of the point where the two straight lines intersect.<br>",
+      "Point of intersection = (______, ______)"
+    ],
+    "input": ["", ""],
+    "answer": ["-2", "1"]
+  },
+  {
+    "questionNo": 12,
+    "question": [
+      "The graphs of the equations<br>",
+      "y = x + 2 ",
+      "and ",
+      "y = -2x + 8 ",
+      "are shown.<br>",
+      "<b>Statements</b><br>",
+      "<b>1. The point (2, 4) lies on the graph of y = x + 2.</b><br>",
+      "<b>2. The point (2, 4) lies on the graph of y = -2x + 8.</b><br>",
+      "<b>3. The point (1, 3) lies on both graphs.</b><br>",
+      "Choose the correct answer."
+    ],
+    "options": [
+      { "text": "Only Statement 1 is correct." },
+      { "text": "Only Statements 1 and 2 are correct." },
+      { "text": "Only Statements 2 and 3 are correct." },
+      { "text": "All three statements are correct." }
+    ],
+    "answer": 1,
+    "image": "./assests/images/question/12.png"
+  },
+  {
+    "questionNo": 13,
+    "question": [
+      "The equations of two lines are given below.<br>",
+      "y = 4x - 1<br>",
+      "y = -2x + 11<br>",
+      "Which of the following points lies on the graphs of both equations?<br>",
+      "Point A: (2, 7)<br>",
+      "Point B: (1, 3)"
+    ],
+    "options": [
+      { "text": "Only Point A" },
+      { "text": "Only Point B" },
+      { "text": "Both" },
+      { "text": "Neither" }
+    ],
+    "answer": 0
+  },
+  {
+    "questionNo": 14,
+    "question": [
+      "The equations of two lines are given below.<br>",
+      "y = 2x + 5<br>",
+      "y = -x + 8<br>",
+      "Which of the following points is the solution to both equations?<br>",
+      "Point A: (1, 7)<br>",
+      "Point B: (2, 9)"
+    ],
+    "options": [
+      { "text": "Only Point A" },
+      { "text": "Only Point B" },
+      { "text": "Both" },
+      { "text": "Neither" }
+    ],
+    "answer": 0
+  },
+  {
+    "questionNo": 15,
+    "question": [
+      "The equations of two straight lines are given below.<br>",
+      "y = 3x + 2<br>",
+      "y = -x + 10<br>",
+      "The point (2, 8) is given.<br>",
+      "Which of the following statements is correct?"
+    ],
+    "options": [
+      { "text": "The point (2, 8) satisfies only the equation y = 3x + 2." },
+      { "text": "The point (2, 8) satisfies only the equation y = -x + 10." },
+      { "text": "The point (2, 8) satisfies both equations." },
+      { "text": "The point (2, 8) satisfies neither equation." }
+    ],
+    "answer": 2
+  },
+  {
+    "questionNo": 16,
+    "question": [
+      "The equations of two straight lines are given below.<br>",
+      "y = 2x + 3<br>",
+      "y = -4x + 17<br>",
+      "The point (4, 11) is given.<br>",
+      "Which of the following statements is correct?"
+    ],
+    "options": [
+      { "text": "The point (4, 11) is a solution only to the equation y = 2x + 3." },
+      { "text": "The point (4, 11) is a solution only to the equation y = -4x + 17." },
+      { "text": "The point (4, 11) is a solution to both equations." },
+      { "text": "The point (4, 11) is not a solution to either equation." }
+    ],
+    "answer": 0
+  }
+
+
+
+
+
+
+]
+
+
+    }
+  ]
+}

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results</title>
+    <link rel="stylesheet" href="wts.css" />
+    <link rel="icon" type="image/x-icon" href="./assests/logo/Logo_last.png" />
+    <link rel="stylesheet" href="graph.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include html2canvas and jsPDF libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  
+  </head>
+<style>
+  .base-with-power {
+  display: inline-flex;
+  align-items: flex-end;  /* flex-end ya flex-start nahi */
+  vertical-align: middle;
+  margin: 0 4px;
+}
+
+.base-number {
+  font-size: 1.8em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.power-input-wrapper {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  font-size: 0.7em;
+  gap: 3px;
+}
+
+.super-input {
+  min-width: 18px;
+  padding: 0 3px;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+}
+  .mixed-fraction {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 3px;
+  }
+
+  .mixed-fraction .whole {
+    margin-right: 2px;
+  }
+
+  .mixed-fraction .fraction {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.85em;
+  }
+
+  .mixed-fraction .numerator {
+    border-bottom: 1.5px solid currentColor;
+    padding: 0 3px;
+    text-align: center;
+  }
+
+  .mixed-fraction .denominator {
+    padding: 0 3px;
+    text-align: center;
+  }
+
+  .sqrt-wrapper {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 3px;
+  }
+
+  .sqrt-radical {
+    font-size: 1.4em;
+    font-family: serif;
+    line-height: 1;
+    color: inherit;
+    margin-right: -2px;
+    position: relative;
+    top: 3px;
+  }
+
+  .sqrt-content {
+    border-top: 2px solid currentColor;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 4px 2px 3px;
+  }
+</style>
+  <body>
+    <div style="height: 30px"></div>
+    <button class="download-button" id="downloadBtn">Download Report</button>
+    <h3 id="classNameDisplay" style="color: white;"></h3>
+    <div class="instructions-container">
+      <h2>Instructions</h2>
+      <ol>
+        <li>1. Download the Report.</li>
+        <br />
+        <li>
+          2. Upload it in your drive inside your homework folder
+        </li>
+      </ol>
+    </div>
+
+    <div class="marks-breakdown" id="breakdown">
+
+      <h2>Score</h2>
+      <ul id="marksList"></ul>
+    </div>
+
+    <div id="picdiv"></div>
+    <div id="questiondiv"></div>
+    <!-- Add this inside the <body> where appropriate -->
+    <div id="pagination-controls" style="text-align: center; margin: 20px 0">
+      <button id="prevPage" class="pagination-button">Previous</button>
+      <span id="pageNumber">Page 1</span>
+      <button id="nextPage" class="pagination-button">Next</button>
+    </div>
+   
+    
+    
+    <button class="download-button" id="downloadBtn2">Download Report</button>
+
+    <div class="loading-overlay" id="loadingOverlay">Downloading...</div>
+    
+
+    <script>
+      const uniqueKey = "G8_Solving Linear Equations Using Graphical Techniques";
+      const className = "G8_Solving Linear Equations Using Graphical Techniques";
+
+      document.getElementById("classNameDisplay").textContent = className;
+
+      // Helper function to get data from local storage under the unique key
+
+      function getFromLocalStorage(key) {
+        let storageData = JSON.parse(localStorage.getItem(key)) || {};
+        return storageData;
+      }
+
+      // getFromLocalStorage(uniqueKey);
+
+      // Variables to keep track of pagination
+      let currentPage = 0;
+      const questionsPerPage = 8; // Number of questions per page
+
+      // Function to handle pagination and update the display
+      function setupPagination() {
+        const questionDiv = document.getElementById("questiondiv");
+        const questions = Array.from(questionDiv.querySelectorAll("div"));
+
+        // Remove old pages
+        questionDiv.innerHTML = "";
+
+        // Create pages
+        for (let i = 0; i < questions.length; i += questionsPerPage) {
+          const pageDiv = document.createElement("div");
+          pageDiv.classList.add("question-page");
+          for (
+            let j = i;
+            j < i + questionsPerPage && j < questions.length;
+            j++
+          ) {
+            pageDiv.appendChild(questions[j]);
+          }
+          questionDiv.appendChild(pageDiv);
+        }
+
+        // Initialize the first page
+        updatePagination();
+      }
+
+      // Function to update the pagination display
+      function updatePagination() {
+        const questionPages = document.querySelectorAll(".question-page");
+        questionPages.forEach((page, index) => {
+          page.style.display = index === currentPage ? "block" : "none";
+        });
+
+        // Update the page number display
+        document.getElementById("pageNumber").textContent = `Page ${
+          currentPage + 1
+        } `;
+
+        // Enable/disable buttons based on the current page
+        document.getElementById("prevPage").disabled = currentPage === 0;
+        document.getElementById("nextPage").disabled =
+          currentPage === questionPages.length - 1;
+      }
+
+      // Event listeners for pagination buttons
+      document.getElementById("prevPage").addEventListener("click", () => {
+        if (currentPage > 0) {
+          currentPage--;
+          updatePagination();
+        }
+      });
+
+      document.getElementById("nextPage").addEventListener("click", () => {
+        const questionPages = document.querySelectorAll(".question-page");
+        if (currentPage < questionPages.length - 1) {
+          currentPage++;
+          updatePagination();
+        }
+      });
+
+      // Call setupPagination to initialize pagination when the page loads
+      setupPagination();
+
+      function clearLocalStorage() {
+        console.log("Clearing local storage...");
+        localStorage.removeItem(uniqueKey);
+
+       
+      }
+
+      // Function to load and display all results with '_question_content'
+      function loadAllResults() {
+        console.log(uniqueKey, "test");
+
+        // Clear existing content
+        const questionContentDiv = document.getElementById("questiondiv");
+        questionContentDiv.innerHTML = ""; // Clear content
+
+        const picContentDiv = document.getElementById("picdiv");
+        picContentDiv.style.display = "none"; // Hide picture content
+
+        // Display content for the unique key
+        displayContentForKey(uniqueKey);
+      }
+      
+      // picContentDiv.display = none;
+
+      // Function to display content based on the unique key
+      function displayContentForKey(uniqueKey) {
+        // Get the data associated with the uniqueKey
+        const data = getFromLocalStorage(uniqueKey);
+        console.log("data", data);
+
+        // Ensure data is an object and contains _question_content
+        if (data && typeof data === "object") {
+          Object.keys(data).forEach((key) => {
+            console.log("key", key);
+
+            // Check if the key includes "_question_content"
+            if (key.includes("_question_content")) {
+              console.log("ok");
+              const content = data[key];
+              const topicName = key.replace("_question_content", ""); // Extract topic name
+
+              // Create a container for each topic
+              const topicContainer = document.createElement("div");
+              topicContainer.style.marginBottom = "20px";
+              topicContainer.style.padding = "10px";
+              topicContainer.style.border = "1px solid #ddd";
+              topicContainer.style.borderRadius = "8px";
+              topicContainer.style.backgroundColor = "#fff";
+
+              // Create and append the topic heading
+              const heading = document.createElement("h3");
+              heading.textContent = topicName;
+              heading.style.marginTop = "0";
+              heading.style.color = "#D6B65B";
+              topicContainer.appendChild(heading);
+
+              // Create and append the content
+              const contentDiv = document.createElement("div");
+              contentDiv.innerHTML = content;
+              contentDiv.style.padding = "10px";
+              topicContainer.appendChild(contentDiv);
+
+              // Append the topic container to the questionContentDiv
+              document
+                .getElementById("questiondiv")
+                .appendChild(topicContainer);
+            }
+          });
+        } else {
+          console.warn("No data available for the key:", uniqueKey);
+        }
+      }
+
+      // Call this function to load and display results
+      loadAllResults();
+
+      // Fetch topics, scores, and total marks from localStorage
+      const data2 = JSON.parse(localStorage.getItem(uniqueKey)) || {};
+      const topics = data2.topics || [];
+      console.log("topics", topics);
+
+      /// Fetch scores and total marks using the unique key
+      const scores = topics.map(
+        (topic) => parseInt(data2[`${topic.heading}_score`]) || 0
+      );
+      const totalMarks = topics.map(
+        (topic) => parseInt(data2[`${topic.heading}_totalQuestions`]) || 0
+      );
+
+      // Determine maximum total marks to scale the y-axis
+      const maxTotalMarks = Math.max(...totalMarks);
+
+      // Data for the chart
+      const data = {
+        labels: topics.map((topic) => topic.heading),
+        datasets: [
+          {
+            label: "Marks Scored",
+            data: scores,
+            backgroundColor: "rgba(70, 192, 192, 0.6)",
+            borderColor: "rgba(70, 192, 192, 1)",
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      // Configuration options for the chart
+      const options = {
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: maxTotalMarks, // Set max value based on total questions
+            title: {
+              display: true,
+              text: "Marks Scored",
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return context.dataset.label + ": " + context.raw;
+              },
+            },
+          },
+        },
+      };
+
+      // Display the marks breakdown
+      const marksList = document.getElementById("marksList");
+      topics.forEach((topic, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${topic.heading}:</strong> <span>${scores[index]} / ${totalMarks[index]}</span>`;
+        marksList.appendChild(li);
+      });
+
+      // Function to add watermark to PDF page
+      function addWatermarkToPDF(pdf) {
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        
+        // Save the current graphics state
+        pdf.saveGraphicsState();
+        
+        // Set watermark properties
+        pdf.setGState(new pdf.GState({opacity: 0.15})); // Set opacity to 15%
+        pdf.setTextColor(255, 165, 0); // Light orange color
+        pdf.setFontSize(50); // Font size
+        pdf.setFont(undefined, 'bold'); // Make it bold
+        
+        // Watermark position
+        const centerX1 = pageWidth * 0.6;
+        const centerY1 = pageHeight * 0.65;
+        
+        pdf.text("Way To Succeed", centerX1, centerY1, {
+          angle: 45, // 45-degree angle
+          align: 'center',
+          baseline: 'middle'
+        });
+        
+        // Restore the graphics state
+        pdf.restoreGraphicsState();
+      }
+
+      
+      // Function to add score data directly to PDF (without image capture)
+      function addScoreDataToPDF(pdf, yPosition) {
+        const data = JSON.parse(localStorage.getItem(uniqueKey)) || {};
+        const topics = data.topics || [];
+        
+        // Draw light gray background rectangle with transparency
+        const boxWidth = pdf.internal.pageSize.getWidth() - 20; // Full width minus margins
+        const boxHeight = 15 + (topics.length * 10); // Dynamic height based on number of topics
+        
+        // Save graphics state to apply transparency
+        pdf.saveGraphicsState();
+        pdf.setGState(new pdf.GState({opacity: 0.6})); // Set opacity to 60%
+        pdf.setFillColor(220, 220, 220); // Light gray background
+        pdf.rect(10, yPosition - 5, boxWidth, boxHeight, 'F'); // Fill rectangle
+        pdf.restoreGraphicsState(); // Restore original state
+        
+        // Draw border
+        pdf.setDrawColor(180, 180, 180); // Gray border color
+        pdf.setLineWidth(0.5);
+        pdf.rect(10, yPosition - 5, boxWidth, boxHeight, 'S'); // Stroke (border) rectangle
+        
+        // Set font and size for the title
+        pdf.setFontSize(18);
+        pdf.setFont(undefined, 'bold');
+        pdf.setTextColor(214, 182, 91); // Gold color similar to #D6B65B
+        pdf.text("Score", 15, yPosition + 5); // Added padding from left
+        
+        let currentY = yPosition + 15;
+        
+        // Set font for the scores
+        pdf.setFontSize(14);
+        pdf.setFont(undefined, 'bold');
+        pdf.setTextColor(0, 0, 0); // Black color
+        
+        topics.forEach((topic) => {
+          const score = parseInt(data[`${topic.heading}_score`]) || 0;
+          const totalQuestions = parseInt(data[`${topic.heading}_totalQuestions`]) || 0;
+          
+          // Add topic name and score with bold formatting
+          const fullText = `${topic.heading}: ${score} / ${totalQuestions}`;
+          pdf.text(fullText, 15, currentY); // Added padding from left
+          
+          currentY += 8; // Move to next line with more spacing
+        });
+        
+        return currentY + 10; // Return the final Y position with extra margin
+      }
+
+      // Updated downloadReport function
+      async function downloadReport() {
+        const { jsPDF } = window.jspdf;
+
+        // Show the loading overlay
+        document.getElementById("loadingOverlay").style.display = "flex";
+
+        // Create a new jsPDF instance
+        const pdf = new jsPDF("p", "mm", "a4");
+
+        // Function to load an image
+        async function loadImage(src) {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.src = src;
+          });
+        }
+
+        // Add a short delay to ensure all elements are rendered
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // Load the logo and banner
+        const logo = await loadImage("./assests/logo/Logo.png");
+        const banner = await loadImage("./assests/logo/banner.png");
+        const logoWidth = 30;
+        const logoHeight = (logo.height * logoWidth) / logo.width;
+        const bannerWidth = pdf.internal.pageSize.getWidth() - 20;
+        const bannerHeight = (banner.height * bannerWidth) / banner.width;
+
+        // Add watermark to the first page
+        addWatermarkToPDF(pdf);
+
+        // Add banner image
+        pdf.addImage(banner.src, "PNG", 10, 10, bannerWidth, bannerHeight);
+        
+        // Add score data directly (not as image) below the banner
+        const scoreYPosition = 10 + bannerHeight + 20; // 20mm margin below banner
+        addScoreDataToPDF(pdf, scoreYPosition);
+
+        // Function to add paginated content
+        async function addPaginatedContent(contentDiv, pdf) {
+          const contentPages = document.querySelectorAll(".question-page");
+          let isFirstContentPage = true;
+
+          for (let i = 0; i < contentPages.length; i++) {
+            const page = contentPages[i];
+            
+            // Add a new page only after the first content page
+            if (!isFirstContentPage) {
+              pdf.addPage();
+              addWatermarkToPDF(pdf);
+            }
+            
+            // Ensure the page is visible before capturing it
+            page.style.display = "block";
+
+            // Capture the page as a canvas
+            const pageCanvas = await html2canvas(page, { 
+              scale: 0.7,
+              backgroundColor: null,
+              allowTaint: true,
+              useCORS: true
+            });
+            const pageImage = pageCanvas.toDataURL("image/png", 0.7);
+            
+            const pageWidth = pdf.internal.pageSize.getWidth() - 20;
+            const pageHeight = pdf.internal.pageSize.getHeight() - 20;
+            const imgWidth = pageWidth;
+            const imgHeight = (pageCanvas.height * imgWidth) / pageCanvas.width;
+
+            // Add the page image to PDF
+            pdf.addImage(pageImage, "PNG", 10, 10, imgWidth, Math.min(imgHeight, pageHeight));
+            
+            // Add the logo to the top right corner
+            pdf.addImage(
+              logo.src,
+              "PNG",
+              pdf.internal.pageSize.getWidth() - logoWidth - 10,
+              10,
+              logoWidth,
+              logoHeight
+            );
+
+            // Hide the page after processing it
+            page.style.display = "none";
+            
+            isFirstContentPage = false;
+          }
+        }
+
+        // Add paginated content to the PDF - start on a new page
+        pdf.addPage();
+        addWatermarkToPDF(pdf);
+        await addPaginatedContent(document.getElementById("questiondiv"), pdf);
+
+        pdf.save(`${className}.pdf`);
+
+        // Hide the loading overlay
+        document.getElementById("loadingOverlay").style.display = "none";
+
+        // Clear local storage
+        clearLocalStorage();
+        window.location.href = 'thankyou.html';
+      }
+
+      document
+        .getElementById("downloadBtn")
+        .addEventListener("click", downloadReport);
+      document
+        .getElementById("downloadBtn2")
+        .addEventListener("click", downloadReport);
+         function disableDevToolsSilently() {
+    // 1️⃣ Disable right-click
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // 2️⃣ Disable common DevTools keyboard shortcuts
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    });
+
+    // 3️⃣ Disable text selection & copy
+    document.body.style.userSelect = "none";
+    document.body.style.webkitUserSelect = "none";
+    document.body.style.mozUserSelect = "none";
+
+    // 4️⃣ Silent DevTools detection (no alert, no redirect)
+    let devtoolsOpen = false;
+    const threshold = 160;
+
+    setInterval(() => {
+      const widthDiff = window.outerWidth - window.innerWidth;
+      const heightDiff = window.outerHeight - window.innerHeight;
+
+      devtoolsOpen = widthDiff > threshold || heightDiff > threshold;
+
+      if (devtoolsOpen) {
+        // Silent sabotage
+        console.clear();
+        debugger;
+      }
+    }, 800);
+  }
+
+  // Call it
+  disableDevToolsSilently();
+    </script>
+  </body>
+</html>
